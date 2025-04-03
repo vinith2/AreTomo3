@@ -233,6 +233,27 @@ void CTsPackage::SaveVol(CTiltSeries* pVol, int iVol)
 	mSaveMrc(acExt, pVol);	
 }
 
+void CTsPackage::SaveModifiedTiltSeries(CTiltSeries* ptilt, int itilt)
+{
+
+	printf("saving titlt series \n");
+	CInput* pInput = CInput::GetInstance();
+	if(pInput->m_iSplitSum == 0)
+	{	if(itilt == 1) return;
+		if(itilt == 2) return;
+	}
+	//-----------------
+	char acExt[32] = {'\0'};
+	if(itilt == 0) strcpy(acExt, "_CTF_tilt.mrc");
+	else if(itilt == 1) strcpy(acExt, "_EVN_CTF_tilt.mrc");
+	else if(itilt == 2) strcpy(acExt, "_ODD_CTF_tilt.mrc");
+	else if(itilt == 3) strcpy(acExt, "_2ND_CTF_tilt.mrc");
+	//-----------------
+
+	printf("savename is %s\n", acExt);
+	mSaveMrc(acExt, ptilt);	
+}
+
 void CTsPackage::SaveTiltSeries(void)
 {
 	CInput* pInput = CInput::GetInstance();
