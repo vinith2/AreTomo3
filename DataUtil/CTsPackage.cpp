@@ -254,6 +254,46 @@ void CTsPackage::SaveModifiedTiltSeries(CTiltSeries* ptilt, int itilt)
 	mSaveMrc(acExt, ptilt);	
 }
 
+void CTsPackage::SaveTiltModifiedFile(CTiltSeries* pTiltSeries, int i)
+{	
+	char acTiltFile[256] = {'0'};
+	if (i == 0) mGenOutPath("_CTF_tilt.tlt", acTiltFile);
+	else if(i == 1) mGenOutPath("_EVN_CTF_tilt.tlt", acTiltFile);
+	else if(i == 2) mGenOutPath("_ODD_CTF_tilt.tlt", acTiltFile);
+	else if(i == 3) mGenOutPath("_2ND_CTF_tilt.tlt", acTiltFile);
+	
+	//mGenOutPath("_CTF_TLT.txt", acTiltFile);
+	//-----------------
+	FILE* pFile = fopen(acTiltFile, "wt");
+	if(pFile == 0L)
+	{	printf("GPU %d warning: Unable to save tilt angles\n\n",
+		   m_iNthGpu, acTiltFile);
+		return;
+	}
+	//-----------------------------------------------
+	// 1) Check if iAcqIdx is 0-based. If yes,
+	// convert it to 1-based to be consistent
+	// with Relion 4.
+	//-----------------------------------------------
+	int iMinAcq = pTiltSeries->m_piAcqIndices[0];
+	for(int i=1; i<pTiltSeries->m_aiStkSize[2]; i++)
+	{	int iAcqIdx = pTiltSeries->m_piAcqIndices[i];
+		if(iMinAcq < iAcqIdx) continue;
+		else iMinAcq = iAcqIdx;
+	}
+	int iAdd = (iMinAcq == 0) ? 1 : 0;
+	//-----------------
+	for(int i=0; i<pTiltSeries->m_aiStkSize[2]; i++)
+	{	float fTilt = pTiltSeries->m_pfTilts[i];
+		//float fDose = pTiltSeries->m_pfDoses[i];
+		//int iAcqIdx = pTiltSeries->m_piAcqIndices[i] + iAdd;
+		fprintf(pFile, "%8.2f\n",fTilt);
+	}
+	fclose(pFile);
+}
+
+
+
 void CTsPackage::SaveTiltSeries(void)
 {
 	CInput* pInput = CInput::GetInstance();

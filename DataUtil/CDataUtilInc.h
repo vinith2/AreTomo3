@@ -384,6 +384,7 @@ public:
 	//-----------------
 	void SaveVol(CTiltSeries* pVol, int iVol);
 	void SaveModifiedTiltSeries(CTiltSeries* ptilt, int itilt);
+	void SaveTiltModifiedFile(CTiltSeries* pTiltSeries, int i);
 	//-----------------
 	char m_acInFile[256];
 	char m_acInDir[256];
