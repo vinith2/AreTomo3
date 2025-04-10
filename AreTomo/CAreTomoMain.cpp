@@ -753,7 +753,7 @@ void CAreTomoMain::mRecon(void)
 		m_pCorrTomoStack->DoIt(i, 0L);
 		pBinnedSeries = mBinAlnSeries(pAtInput->m_afAtBin[0]);
 		// Save the aligned tilt series
-		pTsPackage->SaveModifiedTiltSeries(pRawSeries,i);
+		pTsPackage->SaveModifiedTiltSeries(pBinnedSeries,i);
 		pTsPackage->SaveTiltModifiedFile(pRawSeries, i);
 		mReconVol(pBinnedSeries, iVolZ, i, bWbp);
 		if(pBinnedSeries != 0L) delete pBinnedSeries;
